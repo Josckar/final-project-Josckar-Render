@@ -89,12 +89,12 @@ An Example Employee:
 The above images are placeholders until I can get calendly to work.
 
 ## Site map
-
+```
        Home ('/')
        /  |  \
  /login   Own  Schedule
 ('/login')('appointments/own')('appointments/schedule')
-
+```
 
 ## User Stories or Use Cases
 
