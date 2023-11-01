@@ -1,5 +1,3 @@
-The content below is an example project proposal / requirements document. Replace the text below the lines marked "__TODO__" with details specific to your project. Remove the "TODO" lines.
-
 # Nondescript Business with appointments
 
 ## Overview
@@ -13,7 +11,6 @@ Nondescript Business with appointments is the business website that allows users
 
 ## Data Model
 
-(__TODO__: a description of your application's data and their relationships to each other) 
 
 <!-- The application will store Customers, Managers, Appointment types, timeslots, and ATE. -->
 The application will store Customers, Appointments, and Employees.
@@ -65,6 +62,7 @@ An Example Employee:
   }
 ]
 }
+```
 
 ## [Link to Commented First Draft Schema](db.mjs) 
 
