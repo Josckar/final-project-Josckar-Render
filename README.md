@@ -6,7 +6,7 @@
 
 You're an up and coming hair salon/tattoo shop/other appointment making business, and you've got lots of time, but you need a way for your customers to set up an appointment. No one likes waiting on the phone anymore, so you choose __Nondescript Business with appointments__!
 
-Nondescript Business with appointments is the business website that allows users to schedule appointments with our various workers. Users can register and login. Once they're logged in, they can view their scheduled appointments, and appointment-taking employees (ATEs) may log in to view their scheduled appointments.
+Nondescript Business with appointments is the business website that allows users to schedule appointments with our various workers. Users can register and login. Once they're logged in, they can view their scheduled appointments, and appointment-taking employees may log in to view their scheduled appointments.
 
 
 ## Data Model
@@ -105,8 +105,6 @@ The above images are placeholders until I can get calendly to work.
 5. as a user, I can view all my scheduled appointments
 
 ## Research Topics
-
-(__TODO__: the research topics that you're planning on working on along with their point values... and the total points of research topics listed)
 
 * (6 points) Use React.js as a frontend framework
 * (1 points) Use Calendly API for appointment scheduling
