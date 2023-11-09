@@ -17,5 +17,9 @@
     "path": "^0.12.7",
     "yarn": "^1.22.19"
   },
+  "engines": {
+    "node": ">=16.20.1"
+  },
+  
   "repository": "https://github.com/Josckar/final-project-Josckar-Render.git"
 }
