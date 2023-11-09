@@ -1,8 +1,8 @@
 {
   "name": "final-project-josckar",
   "version": "1.0.0",
-  "description": "final project",
-  "main": "index.js",
+  "description": "final project nondescript scheduler",
+  "main": "app.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,6 +14,8 @@
     "express-session": "^1.17.3",
     "hbs": "^4.2.0",
     "mongoose": "^8.0.0",
-    "path": "^0.12.7"
-  }
+    "path": "^0.12.7",
+    "yarn": "^1.22.19"
+  },
+  "repository": "https://github.com/Josckar/final-project-Josckar-Render.git"
 }
