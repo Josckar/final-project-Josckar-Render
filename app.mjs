@@ -10,6 +10,8 @@ const User = mongoose.model('User');
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+const port = process.env.PORT || 3001;
+
 //test
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -87,4 +89,7 @@ app.post('/login', (req, res) => {
         res.send('Login failed');
     }
 });
-app.listen(process.env.PORT || 3000);
+
+const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+server.keepAliveTimeout = 120 * 1000;
+server.headersTimeout = 120 * 1000;
