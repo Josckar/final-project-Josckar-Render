@@ -11,6 +11,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 //test
+const port = process.env.PORT || 3001;
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -88,11 +89,9 @@ app.post('/login', (req, res) => {
     }
 }); 
 
-const port = process.env.PORT || 3001;
+
 
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
-
-app.listen(process.env.PORT || 3000);
