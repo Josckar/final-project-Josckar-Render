@@ -1,0 +1,35 @@
+body {
+	font-family: 'Fira Sans Extra Condensed', sans-serif;
+}
+header {
+    padding: 0;
+    margin: 0;
+	text-align: center;
+	background-color: #f0f0f0;
+}
+.appointments-table { /*style borrowed from https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l*/
+    border-collapse: collapse;
+    margin: 0 auto;
+    margin-top: 20px;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.appointments-table th, .appointments-table td {
+    padding: 8px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.appointments-table tr:last-child td {
+    border-bottom: none; 
+}
+
+.appointments-table tr td:first-child {
+    border-left: 1px solid #ddd;
+}
+
+.appointments-table tr td:last-child {
+    border-right: 1px solid #ddd; 
+}

@@ -1,0 +1,31 @@
+<head>
+    <title>User Appointments</title>
+</head>
+<body>
+    <h2>Hi {{ user.username }}!</h2>
+    <p>Here are your appointments:</p>
+    
+    <table class = "appointments-table">
+        <thead>
+            <tr>
+                <th>Appointment ID</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Customer</th>
+                <th>Employee</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each user.appointments}}
+                <tr>
+                    <td>{{ id }}</td>
+                    <td>{{ date }}</td>
+                    <td>{{ time }}</td>
+                    <td>{{ customer }}</td>
+                    <td>{{ employee }}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Schedule Appointments</title>
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
+</head>
+<body>
+    <h2>Schedule Appointments</h2>
+    
+    <table class="appointments-table">
+        <thead>
+            <tr>
+                <th>Appointment ID</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Customer</th>
+                <th>Employee</th>
+                <th>Action</th> <!-- Add a new column for the action -->
+            </tr>
+        </thead>
+        <tbody>
+            {{#each availableAppointments}}
+                <tr>
+                    <td>{{ id }}</td>
+                    <td>{{ date }}</td>
+                    <td>{{ time }}</td>
+                    <td>{{ customer }}</td>
+                    <td>{{ employee }}</td>
+                    <td><a href="/accept-appointment/{{ id }}">Click to accept appointment</a></td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+        <div class="calendly-inline-widget" style="min-width: 320px; height: 580px;" data-auto-load="true"></div>
+    <script>
+        Calendly.initInlineWidget({
+            "url": 'https://calendly.com/YOURLINK'
+        });
+    </script>
+</body>
+</html>
