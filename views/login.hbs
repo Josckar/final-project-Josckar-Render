@@ -1,15 +1,26 @@
+<!-- views/login.handlebars -->
+<!DOCTYPE html>
 <html>
 <head>
     <title>Login</title>
 </head>
 <body>
     <h2>Login</h2>
+    {{#if registerSuccess}}
+        <p style="color: green;">Register Successful, now you can log in!</p>
+    {{/if}}
     <form action="/login" method="POST">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
         <br>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
+        <br>
+        <label for="userType">User Type:</label>
+        <select id="userType" name="userType" required>
+            <option value="customer">Customer</option>
+            <option value="employee">Employee</option>
+        </select>
         <br>
         <button type="submit">Login</button>
     </form>
