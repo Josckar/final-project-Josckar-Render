@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 // User schema
 async function connectToDatabase() {
     try {
-        await mongoose.connect(process.env.DSN, { dbName: 'finalproject' });
+        await mongoose.connect(process.env.DSN, { dbName: 'NondescriptScheduler' });
         console.log('Connected to the database');
 
         // Access the Mongoose connection object
