@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <script src="/validate.js" defer></script>
+</head>
+<body>
+    <h2>Login</h2>
+    <form action="/register" method="POST" onsubmit="return validateForm()">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+        <br>
+        <label for="userType">User Type:</label>
+        <select id="userType" name="userType" required>
+            <option value="customer">Customer</option>
+            <option value="employee">Employee</option>
+        </select>
+        <br>
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>

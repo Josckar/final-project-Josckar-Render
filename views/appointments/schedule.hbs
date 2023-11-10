@@ -6,7 +6,15 @@
 </head>
 <body>
     <h2>Schedule Appointments</h2>
-    
+    <form action="/appointments/schedule" method="POST">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+        <br>
+        <label for="time">Time:</label>
+        <input type="time" id="time" name="time" required>
+        <br>
+        <button type="submit">Schedule Appointment</button>
+    </form>
     <table class="appointments-table">
         <thead>
             <tr>
