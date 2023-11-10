@@ -220,7 +220,38 @@ app.post('/appointments/schedule', async (req, res) => {
 
 //code taken from render template
 
-const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+const server = app.listen(port, () => console.log(`App listening on port ${port}!`));
 
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
+
+//calendly scheduling
+// async function createCalendlyEvent(eventDetails) {
+//     try {
+//         const response = await axios.post(`${API_BASE_URL}/scheduling_links`, eventDetails, {
+//             headers: {
+//                 'Authorization': `Bearer ${API_KEY}`,
+//                 'Content-Type': 'application/json',
+//             },
+//         });
+
+//         // Handle the response, e.g., log or return data
+//         console.log('Calendly Event Created:', response.data);
+//         return response.data;
+//     } catch (error) {
+//         // Handle errors, e.g., log or throw
+//         console.error('Error creating Calendly event:', error.response.data);
+//         throw error;
+//     }
+// }
+
+// // Example usage:
+// const eventDetails = {
+//     name: 'Meeting with Client',
+//     start_time: '2023-12-01T10:00:00Z',
+//     end_time: '2023-12-01T11:00:00Z',
+//     event_type: 'EVENT_TYPE_UUID', // Replace with your event type UUID
+//     // Add other required or optional parameters based on the Calendly API documentation
+// };
+
+// createCalendlyEvent(eventDetails);
