@@ -7,4 +7,7 @@ import crypto from 'crypto';
 export function generateSessionSecret(length = 32) {
   return crypto.randomBytes(length).toString('hex');
 }
-export const sessionSecret = generateSessionSecret(32);
+const sessionSecret = generateSessionSecret(32);
+export {sessionSecret};
+
+

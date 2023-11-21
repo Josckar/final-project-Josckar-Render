@@ -5,7 +5,7 @@
     <script src="/validate.js" defer></script>
 </head>
 <body>
-    <h2>Login</h2>
+    <h2>Register</h2>
     <form action="/register" method="POST" onsubmit="return validateForm()">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
@@ -17,12 +17,20 @@
         <input type="password" id="confirmPassword" name="confirmPassword" required>
         <br>
         <label for="userType">User Type:</label>
-        <select id="userType" name="userType" required>
+        <select id="userType" name="userType" required onchange="showCalendlyLink()">
             <option value="customer">Customer</option>
             <option value="employee">Employee</option>
         </select>
         <br>
+        <div id="calendlyLinkField" style="display: none;">
+            <label for="calendlyLink">Calendly Link:</label>
+            <input type="text" id="calendlyLink" name="calendlyLink">
+            <br>
+        </div>
         <button type="submit">Register</button>
     </form>
+
+    <script src = "js/showCalendlyLink">
+    </script>
 </body>
 </html>

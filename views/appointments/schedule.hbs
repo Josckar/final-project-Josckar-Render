@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Schedule Appointments</title>
-    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
+
 </head>
+
 <body>
+    {{#if alreadyLoggedIn}}
+    <div style="background-color: #4CAF50; color: black; padding: 10px; text-align: center;">
+        You are already logged in!
+    </div>
+    {{/if}}
     <h2>Schedule Appointments</h2>
     <form action="/appointments/schedule" method="POST">
         <label for="date">Date:</label>
@@ -28,22 +35,24 @@
         </thead>
         <tbody>
             {{#each availableAppointments}}
-                <tr>
-                    <td>{{ id }}</td>
-                    <td>{{ date }}</td>
-                    <td>{{ time }}</td>
-                    <td>{{ customer }}</td>
-                    <td>{{ employee }}</td>
-                    <td><a href="/accept-appointment/{{ id }}">Click to accept appointment</a></td>
-                </tr>
+            <tr>
+                <td>{{ id }}</td>
+                <td>{{ date }}</td>
+                <td>{{ time }}</td>
+                <td>{{ customer }}</td>
+                <td>{{ employee }}</td>
+                <td><a href="/accept-appointment/{{ id }}">Click to accept appointment</a></td>
+            </tr>
             {{/each}}
         </tbody>
     </table>
-        <div class="calendly-inline-widget" style="min-width: 320px; height: 580px;" data-auto-load="true"></div>
+    {{!-- <div class="calendly-inline-widget" style="min-width:320px;height:580px;" data-auto-load="false"></div>
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
     <script>
         Calendly.initInlineWidget({
             "url": 'https://calendly.com/YOURLINK'
         });
-    </script>
+    </script> --}}
 </body>
+
 </html>

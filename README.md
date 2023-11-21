@@ -88,6 +88,8 @@ An Example Employee:
 
 The above images are placeholders until I can get calendly to work.
 
+The website will currently operate on individual calendly accounts, but can be adapted to support teams.
+
 ## Site map
 ```
        Home ('/')

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-// User schema
+// User schema  
 async function connectToDatabase() {
     try {
         await mongoose.connect(process.env.DSN, { dbName: 'NondescriptScheduler' });
@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema({
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' }],
         default: [],
     },
+    
 });
 const User = mongoose.model('User', userSchema);
 
@@ -39,7 +40,7 @@ const customerSchema = new mongoose.Schema({
 const Customer = User.discriminator('Customer', customerSchema);
 
 const employeeSchema = new mongoose.Schema({
-
+    calendlyLink: String,
 });
 
 const Employee = User.discriminator('Employee', employeeSchema);
