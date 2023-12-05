@@ -13,6 +13,7 @@
     </div>
     {{/if}}
     <h2>Schedule Appointments</h2>
+    <h3>If none of these slots work, please enter an appointment and we will contact you at our earliest convenience</h3>
     <form action="/appointments/schedule" method="POST">
         <label for="date">Date:</label>
         <input type="date" id="date" name="date" required>
@@ -46,13 +47,6 @@
             {{/each}}
         </tbody>
     </table>
-    {{!-- <div class="calendly-inline-widget" style="min-width:320px;height:580px;" data-auto-load="false"></div>
-    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
-    <script>
-        Calendly.initInlineWidget({
-            "url": 'https://calendly.com/YOURLINK'
-        });
-    </script> --}}
 </body>
 
 </html>

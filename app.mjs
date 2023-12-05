@@ -37,7 +37,7 @@ const sessionStore = MongoStore.create({
   dbName: 'NondescriptScheduler',
   collectionName: 'sessions',
 });
-  
+
 app.use(
   session({
     secret: sessionSecret,
@@ -91,7 +91,7 @@ app.post('/login', async (req, res) => {
       : userType === 'employee' || userType === 'Employee'
         ? Employee
         : null;
- 
+
   if (!UserModel) {
     return res.status(400).send('Invalid userType');
   }
@@ -127,7 +127,7 @@ app.get('/register', (req, res) => {
 
 app.post('/register', async (req, res) => {
   try {
-    const { username, password, confirmPassword, userType, calendlyLink } = req.body;
+    const { username, password, confirmPassword, userType, calendlyLink, calendlyUri } = req.body;
 
     // Check if the username already exists in the database
     const existingUser = await User.findOne({ username }).exec();
@@ -135,16 +135,14 @@ app.post('/register', async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ error: 'Username already exists' });
     }
-
     let newUser;
     if (userType === 'customer') {
       newUser = new Customer({ username, password });
     } else if (userType === 'employee') {
-      newUser = new Employee({ username, password, calendlyLink });
+      newUser = new Employee({ username, password, calendlyLink, calendlyUri });
     } else {
       return res.status(400).json({ error: 'Invalid userType' });
     }
-
     await newUser.save();
 
     res.redirect('/login?registerSuccess=true');
@@ -164,8 +162,8 @@ app.get('/account', async (req, res) => {
       req.session.userType === 'customer'
         ? Customer
         : req.session.userType === 'employee'
-        ? Employee
-        : null;
+          ? Employee
+          : null;
 
     if (!UserModel) {
       return res.status(400).send('Invalid userType');
@@ -195,8 +193,8 @@ app.post('/account', async (req, res) => {
       req.session.userType === 'customer'
         ? Customer
         : req.session.userType === 'employee'
-        ? Employee
-        : null;
+          ? Employee
+          : null;
 
     if (!UserModel) {
       return res.status(400).send('Invalid userType');
@@ -228,6 +226,72 @@ app.post('/account', async (req, res) => {
   }
 });
 
+// Add a new route for handling password changes
+app.post('/account/password', async (req, res) => {
+  try {
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+
+    const UserModel =
+      req.session.userType === 'customer'
+        ? Customer
+        : req.session.userType === 'employee'
+          ? Employee
+          : null;
+
+    if (!UserModel) {
+      return res.status(400).send('Invalid userType');
+    }
+
+    const userId = req.session.user._id;
+    const user = await UserModel.findById(userId).exec();
+
+    if (!user) {
+      return res.send('User not found');
+    }
+
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    // Check if the current password matches the one in the database
+    if (currentPassword !== user.password) {
+      // Send a response to the client to indicate password mismatch
+      res.status(400).json({ success: false, error: 'Current password is incorrect' });
+      return;
+    }
+
+    // Check if the new password and confirm password match
+    if (newPassword !== confirmPassword) {
+      // Send a response to the client to indicate password mismatch
+      res.status(400).json({ success: false, error: 'New password and confirm password do not match' });
+      return;
+    }
+
+    // Update user's password
+    user.password = newPassword;
+    await user.save();
+
+    // Update session user object with the latest changes
+    req.session.user = user.toObject();
+
+    // Send a success response to the client
+    res.redirect('/account');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
+app.post('/account/update-uri', (req, res) => {
+  const { calendlyUri } = req.body.newCalendlyUri;
+
+  // Update the user's Calendly URI in your database (replace this with your database logic)
+  // For now, let's just update the example user
+  req.session.user.calendlyUri = calendlyUri;
+
+  res.render('account', { user: req, success: true, message: 'Calendly URI updated successfully' });
+});
+
 app.get('/appointments/own', async (req, res) => {
   if (!req.session.user) {
     res.redirect('/login');
@@ -246,32 +310,67 @@ app.get('/appointments/own', async (req, res) => {
   const username = req.session.user.username;
   const password = req.session.user.password;
   const user = await UserModel.findOne({ username, password }).exec();
-
   if (!user) {
     return res.send('User not found');
   }
-
-  res.render('appointments/own', { user });
+  let thing = [];
+  thing = user.appointments;
+  console.log(thing);
+  res.render('appointments/own', {  thing  });
 });
 
 app.get('/appointments/schedule', async (req, res) => {
-  const availabilities = [];
-  for (const user of userUris) {
-    availabilities.push(fetch((`https://api.calendly.com/user_availability_schedules?user=${user}`), options)
-      .then(response => response.json())
-      .then(response => console.log(response))
-      .catch(err => console.error(err)));
-  }
-  // await fetch('https://api.calendly.com/users/me', options)
-  //   .then((response) => response.json())
-  //   .then((response) => console.log(response))
-  //   .catch((err) => console.error(err));
+  try {
+    const availabilities = [];
 
-  res.render('appointments/schedule', {
-    availableAppointments,
-    alreadyLoggedIn: true,
-  });
+    // Fetch availabilities for each user
+    for (const user of userUris) {
+      const response = await fetch(`https://api.calendly.com/user_availability_schedules?user=${user}`, options);
+
+      if (!response.ok) {
+        throw new Error(`Error fetching availability for user ${user}: ${response.statusText}`);
+      }
+
+      const availabilityData = await response.json();
+      availabilities.push(availabilityData);
+    }
+
+    // Process availabilities and render the appointments table
+    const availableAppointments = processAvailabilities(availabilities);
+    res.render('appointments/schedule', { availableAppointments, alreadyLoggedIn: true });
+  } catch (error) {
+    console.error('Error:', error.message);
+    res.status(500).send('Error fetching availabilities');
+  }
 });
+
+function processAvailabilities(availabilities) {
+  const availableAppointments = [];
+
+  availabilities.forEach(schedule => {
+    schedule.collection.forEach(scheduleItem => {
+      const intervals = scheduleItem.rules
+        .filter(rule => rule.type === 'wday')
+        .flatMap(rule => rule.intervals);
+
+      if (intervals.length > 0) {
+        intervals.forEach(interval => {
+          availableAppointments.push({
+            id: scheduleItem.uri.split('/').pop(), // Extracting ID from the URI
+            date: interval.date || '', // For 'date' type rule
+            time: `${interval.from} - ${interval.to}`,
+            // Additional information as needed
+            name: scheduleItem.name,
+            user: scheduleItem.user,
+            timezone: scheduleItem.timezone,
+          });
+        });
+      }
+    });
+  });
+  console.log(availableAppointments);
+  return availableAppointments;
+}
 
 app.post('/appointments/schedule', async (req, res) => {
   if (!req.session.user) {
@@ -284,9 +383,9 @@ app.post('/appointments/schedule', async (req, res) => {
     date,
     time,
     customer:
-      req.session.userType === 'customer' ? req.session.user._id : undefined,
+      req.session.userType === 'customer' ? req.session.user.username : undefined,
     employee:
-      req.session.userType === 'employee' ? req.session.user._id : undefined,
+    req.session.userType === 'employee' ? req.session.user.username : undefined,
   });
 
   try {
@@ -306,7 +405,7 @@ app.post('/appointments/schedule', async (req, res) => {
       return res.send('User not found');
     }
 
-    user.appointments.push(appointment._id);
+    user.appointments.push(appointment);
     await user.save();
 
     req.session.user = user.toObject();

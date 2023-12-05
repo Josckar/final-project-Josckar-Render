@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Register</title>
     <script src="/validate.js" defer></script>
 </head>
+
 <body>
     <h2>Register</h2>
     <form action="/register" method="POST" onsubmit="return validateForm()">
@@ -27,10 +29,16 @@
             <input type="text" id="calendlyLink" name="calendlyLink">
             <br>
         </div>
+        <div id="calendlyUriField" style="display: none;">
+            <label for="calendlyUri">Calendly URI:</label>
+            <input type="text" id="calendlyUri" name="calendlyUri">
+            <br>
+        </div>
         <button type="submit">Register</button>
     </form>
 
-    <script src = "js/showCalendlyLink">
+    <script src="js/showCalendlyLink">
     </script>
 </body>
+
 </html>
