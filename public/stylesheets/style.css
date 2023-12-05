@@ -1,35 +1,77 @@
+/* Custom styles for your Bootstrap project */
+
+/* Body styles */
 body {
-	font-family: 'Fira Sans Extra Condensed', sans-serif;
-}
-header {
+    font-family: 'Fira Sans Extra Condensed', sans-serif;
+  }
+  
+  /* Header styles */
+  header {
+    background-color: #343a40;
+    color: #ffffff;
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  header h1 {
+    font-size: 2rem;
+  }
+  
+  header h3 {
+    font-size: 1rem;
+    font-style: italic;
+  }
+  
+  /* Navigation styles */
+  nav {
+    background-color: #e9ecef;
+    padding: 0.5rem;
+  }
+  
+  ul.links {
+    list-style: none;
     padding: 0;
     margin: 0;
-	text-align: center;
-	background-color: #f0f0f0;
-}
-.appointments-table { /*style borrowed from https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l*/
-    border-collapse: collapse;
+  }
+  
+  ul.links li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  ul.links li a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+  }
+  
+  /* Container styles */
+  #container {
+    max-width: 960px;
     margin: 0 auto;
-    margin-top: 20px;
-    font-size: 0.9em;
-    font-family: sans-serif;
-    min-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-}
-.appointments-table th, .appointments-table td {
-    padding: 8px 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.appointments-table tr:last-child td {
-    border-bottom: none; 
-}
-
-.appointments-table tr td:first-child {
-    border-left: 1px solid #ddd;
-}
-
-.appointments-table tr td:last-child {
-    border-right: 1px solid #ddd; 
-}
+  }
+  
+  /* Content styles */
+  #content {
+    padding: 20px;
+  }
+  
+  /* Footer styles (if needed) */
+  footer {
+    background-color: #343a40;
+    color: #ffffff;
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  /* Responsive styles (adjust as needed) */
+  @media (max-width: 767px) {
+    header h1 {
+      font-size: 1.5rem;
+    }
+  
+    header h3 {
+      font-size: 0.8rem;
+    }
+  }
+  

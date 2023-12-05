@@ -20,7 +20,18 @@ const options = {
   },
 };
 
-const userUris = process.env.USER_URIS.split(',');
+
+async function fetchEmployeeCalendlyUris() {
+  try {
+    const employees = await User.find({ userType: 'employee' }, 'calendlyUri').exec();
+    const employeeUris = employees.map(employee => employee.calendlyUri);
+    return employeeUris.filter(uri => uri);  // Filter out null or undefined values
+  } catch (error) {
+    console.error('Error fetching employee URIs:', error.message);
+    throw error;
+  }
+}
+
 const port = process.env.PORT || 3001;
 
 const app = express();
@@ -256,6 +267,7 @@ app.post('/account/password', async (req, res) => {
     // Check if the current password matches the one in the database
     if (currentPassword !== user.password) {
       // Send a response to the client to indicate password mismatch
+
       res.status(400).json({ success: false, error: 'Current password is incorrect' });
       return;
     }
@@ -282,49 +294,88 @@ app.post('/account/password', async (req, res) => {
   }
 });
 
-app.post('/account/update-uri', (req, res) => {
-  const { calendlyUri } = req.body.newCalendlyUri;
+app.post('/account/update-uri', async (req, res) => {
+  try {
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
 
-  // Update the user's Calendly URI in your database (replace this with your database logic)
-  // For now, let's just update the example user
-  req.session.user.calendlyUri = calendlyUri;
+    const UserModel =
+      req.session.userType === 'customer'
+        ? Customer
+        : req.session.userType === 'employee'
+          ? Employee
+          : null;
 
-  res.render('account', { user: req, success: true, message: 'Calendly URI updated successfully' });
+    if (!UserModel) {
+      return res.status(400).send('Invalid userType');
+    }
+
+    const userId = req.session.user._id;
+    const newCalendlyUri = req.body.newCalendlyUri;
+
+    const result = await UserModel.updateOne({ _id: userId }, { $set: { calendlyUri: newCalendlyUri } });
+
+    if (result.nModified === 1) {
+
+      req.session.user.calendlyUri = newCalendlyUri; 
+
+      res.render('account', {
+        user: req.session.user,
+        success: true,
+        message: 'Calendly URI updated successfully'
+      });
+    } else {
+
+      res.status(400).json({ success: false, error: 'Calendly URI update failed' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
 });
 
 app.get('/appointments/own', async (req, res) => {
-  if (!req.session.user) {
-    res.redirect('/login');
-  }
+  try {
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
 
-  const UserModel =
-    req.session.userType === 'customer'
-      ? Customer
-      : req.session.userType === 'employee'
-        ? Employee
-        : null;
+    const UserModel =
+      req.session.userType === 'customer'
+        ? Customer
+        : req.session.userType === 'employee'
+          ? Employee
+          : null;
 
-  if (!UserModel) {
-    return res.status(400).send('Invalid userType');
+    if (!UserModel) {
+      return res.status(400).send('Invalid userType');
+    }
+
+    const userId = req.session.user._id;
+    const user = await UserModel.findById(userId).populate('appointments').exec();
+
+    if (!user) {
+      return res.send('User not found');
+    }
+
+    const appointments = user.appointments; // Ensure appointments are populated
+
+    res.render('appointments/own', { appointments });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-  const username = req.session.user.username;
-  const password = req.session.user.password;
-  const user = await UserModel.findOne({ username, password }).exec();
-  if (!user) {
-    return res.send('User not found');
-  }
-  let thing = [];
-  thing = user.appointments;
-  console.log(thing);
-  res.render('appointments/own', {  thing  });
 });
 
 app.get('/appointments/schedule', async (req, res) => {
   try {
     const availabilities = [];
-
+    const userUris = await fetchEmployeeCalendlyUris();
+    console.log(`user uris: ${userUris}`);
     // Fetch availabilities for each user
     for (const user of userUris) {
+      console.log(user);
       const response = await fetch(`https://api.calendly.com/user_availability_schedules?user=${user}`, options);
 
       if (!response.ok) {
